@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import { noteData } from "./firebaseConfig";
 
-function App() {
+import Nav from "./components/Nav";
+import NoteList from "./components/NoteList";
+import NoteForm from "./components/NoteForm";
+import { connect } from "react-redux";
+import AlertInfo from "./components/AlertInfo";
+import { ToastContainer } from "react-toastify";
+
+function App(props) {
+  // const deleteData = (id) => {
+  //   var db2 = app.database().ref().child("note").child(id);
+  //   db2
+  //     .remove()
+  //     .then(() => console.log("Xoa thanh cong"))
+  //     .catch((error) => console.log("Loi: " + error.message));
+  // };
+  // noteData.on("value", (snapshot) => {
+  //   console.log(snapshot.val());
+  // });
+  const { isEdit } = props;
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Nav />
+      <div className="container">
+        <div className="row">
+          <NoteList />
+          {isEdit ? <NoteForm /> : null}
+        </div>
+      </div>
+      {/* <AlertInfo /> */}
+      <ToastContainer />
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = (state, ownProps) => {
+  return {
+    isEdit: state.note.isEdit,
+  };
+};
+
+export default connect(mapStateToProps)(App);
